@@ -6,11 +6,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
-@Profile("google")
-@Configuration
+//@Profile("google")
+//@Configuration
 public class GoogleConfig {
     @Bean
     public RouteLocator googleRouteConfig(RouteLocatorBuilder builder) {
+        //traffic manipulation throughout the gateway
         return builder
                 .routes()
                 .route(r -> r.path("/googlesearch")
