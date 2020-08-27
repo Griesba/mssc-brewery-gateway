@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Profile;
 @Configuration
 public class LoadBalancedRoutesConfig {
     @Bean
-    RouteLocator loadBalancedRoutes(RouteLocatorBuilder routeLocatorBuilder) {
+    public RouteLocator loadBalancedRoutes(RouteLocatorBuilder routeLocatorBuilder) {
         return routeLocatorBuilder.routes()
                 .route(r -> r.path("/api/v1/beer*", "/api/v1/beer/*", "/api/vi/beerUpc/*")
                         .uri("lb://beer-service")
@@ -19,7 +19,10 @@ public class LoadBalancedRoutesConfig {
                         .uri("lb://order-service")
                         .id("order-service"))
                 .route(r -> r.path("/api/v1/beer/*/inventory")
-                        .filters(f-> f.circuitBreaker(c -> c.setName("inventoryCB").setFallbackUri("forward:/inventory-failover").setRouteId("inv-failover")))
+                        .filters(f-> f.circuitBreaker(c -> c.setName("inventoryCB")
+                                .setFallbackUri("forward:/inventory-failover")
+                                .setRouteId("inv-failover")
+                        ))
                         .uri("lb://inventory-service")
                         .id("inventory-service"))
                 .route(r -> r.path("/inventory-failover/**")
